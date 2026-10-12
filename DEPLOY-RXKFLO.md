@@ -31,3 +31,5 @@ Before cleanup verify HTTPS, owner access, closed registration, round-trip email
 - Old `cloud-mail` Worker, `cloudmail` D1/KV, mail web binding and old Email Routing removed. Old zone's unrelated A record and other projects remain.
 
 Merged implementation: https://github.com/florianmirren-cyber/cloud-mail/pull/1
+
+The deployment also guards static-resource paths against cached SPA HTML fallbacks. Missing scripts/styles return 404 with no-store, navigation HTML revalidates, and real assets keep normal caching. Thirteen security/regression tests cover webhook validation and asset responses.
