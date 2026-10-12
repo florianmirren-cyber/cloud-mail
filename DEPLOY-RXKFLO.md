@@ -19,3 +19,15 @@ Resend callback: `https://mail.rxkflo.tech/api/webhooks`. Subscribe to `email.de
 ## Cleanup gate
 
 Before cleanup verify HTTPS, owner access, closed registration, round-trip email, attachments, unknown-recipient rejection, plus-address delivery, authenticated callbacks and persistence after redeployment. Backup the old D1 and configuration first. Only old mailbox resources are in the cleanup scope.
+
+## Completed acceptance — 2026-10-12
+
+- Domain active; HTTPS, owner login and administrator settings verified. Public registration rejects requests.
+- Resend → owner's Gmail delivered with a text attachment and inline image. Signed delivery callback set status to delivered. Gmail initially classified the test message as spam; the owner account marked it as not spam. Inbox placement for other recipients is not guaranteed.
+- Gmail reply → owner mailbox received; text attachment download matched the original SHA-256 and inline image loaded. `florian+acceptance` received; nonexistent address returned `555 5.7.1 Recipient not found`.
+- A forged bounce callback targeting the real test message returned 400 and left delivered status unchanged. Seven automated webhook tests passed.
+- Manual deployment run `38203689949` preserved the password/salt, Resend setting, one user, three emails and four attachment records.
+- Old SQL export restored successfully into a local verification database (two users, three accounts, one email). Private local backups are in ignored `.secrets/backups/`.
+- Old `cloud-mail` Worker, `cloudmail` D1/KV, mail web binding and old Email Routing removed. Old zone's unrelated A record and other projects remain.
+
+Merged implementation: https://github.com/florianmirren-cyber/cloud-mail/pull/1
