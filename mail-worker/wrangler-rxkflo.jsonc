@@ -1,0 +1,36 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cloud-mail-rxkflo",
+  "account_id": "e0ca94964f12d5614c6e2435e8fddc3d",
+  "main": "src/index.js",
+  "compatibility_date": "2026-10-12",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "routes": [{ "pattern": "mail.rxkflo.tech", "custom_domain": true }],
+  "d1_databases": [{
+    "binding": "db",
+    "database_name": "cloud-mail-rxkflo",
+    "database_id": "1b243d3e-8577-4127-8e67-1ca61a3dd8d9"
+  }],
+  "kv_namespaces": [{ "binding": "kv", "id": "19ac13c04732450fb942b1749bd050d6" }],
+  "assets": {
+    "binding": "assets",
+    "directory": "./dist",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": true
+  },
+  "triggers": { "crons": ["0 * * * *"] },
+  "observability": {
+    "enabled": true,
+    "logs": { "enabled": true, "invocation_logs": false }
+  },
+  "vars": {
+    "domain": ["rxkflo.tech"],
+    "admin": "florian@rxkflo.tech",
+    "analysis_cache": false,
+    "project_link": "https://github.com/florianmirren-cyber/cloud-mail"
+  },
+  "build": {
+    "command": "pnpm --prefix ../mail-vue install --frozen-lockfile && pnpm --prefix ../mail-vue run build"
+  }
+}

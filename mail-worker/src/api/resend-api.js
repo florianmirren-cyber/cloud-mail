@@ -1,10 +1,9 @@
 import resendService from '../service/resend-service';
 import app from '../hono/hono';
-app.post('/webhooks',async (c) => {
-	try {
-		await resendService.webhooks(c, await c.req.json());
-		return c.text('success', 200)
-	} catch (e) {
-		return  c.text(e.message, 500)
-	}
-})
+import { bodyLimit } from 'hono/body-limit';
+import { createResendWebhookHandler } from '../utils/resend-webhook';
+
+app.post('/webhooks',
+  bodyLimit({ maxSize: 1024 * 1024 }),
+  createResendWebhookHandler((c, event) => resendService.webhooks(c, event))
+);
