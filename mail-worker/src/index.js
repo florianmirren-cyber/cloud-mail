@@ -6,6 +6,7 @@ import emailService from './service/email-service';
 import kvObjService from './service/kv-obj-service';
 import oauthService from './service/oauth-service';
 import analysisService from './service/analysis-service';
+import { serveAssets } from './utils/asset-response';
 export default {
 	 async fetch(req, env, ctx) {
 
@@ -21,7 +22,7 @@ export default {
 			 return await kvObjService.toObjResp( { env }, url.pathname.substring(1));
 		 }
 
-		return env.assets.fetch(req);
+		return serveAssets(req, env.assets);
 	},
 	email: email,
 	async scheduled(c, env, ctx) {

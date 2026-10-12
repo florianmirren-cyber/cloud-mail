@@ -32,7 +32,7 @@ jobs:
             mail-vue/pnpm-lock.yaml
       - name: Install Worker dependencies
         run: pnpm --dir mail-worker install --frozen-lockfile
-      - name: Test webhook authentication
+      - name: Test webhook authentication and asset responses
         run: pnpm --dir mail-worker exec vitest run --config vitest.webhook.config.mjs
       - name: Validate production build
         run: pnpm --dir mail-worker exec wrangler deploy --config wrangler-rxkflo.jsonc --dry-run
