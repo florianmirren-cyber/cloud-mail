@@ -44,6 +44,9 @@ describe('conservative verification classification and text rendering', () => {
     'Verification code settings: 846291 USD',
     'Verification code settings: 12.846291',
     '验证码设置已更新。订单号：846291',
+    'Security code settings changed\nYour order number is 846291',
+    'Verification code preferences\nAccount number 846291',
+    'Security code guidelines\nCall customer support at 846291',
   ])('withholds unrelated or ambiguous mail: %s', text => {
     expect(classifyVerificationEmail({ text }).isVerification).toBe(0);
   });

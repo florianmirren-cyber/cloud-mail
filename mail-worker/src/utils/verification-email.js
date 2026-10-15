@@ -43,11 +43,20 @@ export function classifyVerificationEmail(mail = {}) {
       || /\d[.,:]$/.test(before) || /^[.,:]\d/.test(after)) continue;
     const anchored = contexts.some(context => {
       const end = context.index + context[0].length;
-      // A short same-sentence phrase, or a code on the line after its label.
-      const gap = match.index >= end ? text.slice(end, match.index)
+      const followsKeyword = match.index >= end;
+      const gap = followsKeyword ? text.slice(end, match.index)
         : context.index >= match.index + code.length ? text.slice(match.index + code.length, context.index) : null;
-      return gap !== null && gap.length <= 60
-        && !/[.!?。！？]/.test(gap) && gap.split('\n').length <= 4;
+      if (gap === null || gap.length > 60 || gap.split('\n').length > 4) return false;
+      if (followsKeyword) {
+        // A label/delimiter is required, not merely a keyword somewhere nearby.
+        // Preserve ambiguous alternatives so both candidates are withheld.
+        const labelGap = gap.replace(/[A-Za-z0-9]{4,10}\s*(?:or\b|或者|或|\/)\s*/gi, '');
+        return /^(?:[\s:：=—–'"“”‘’()[\]【】-]|\b(?:is|was|below)\b|是|为|為|如下)*$/iu.test(labelGap);
+      }
+      if (/[\u3400-\u9fff]/.test(context[0])) {
+        return /^[\s:：'"“”‘’()[\]【】]*[是为為]?(?:您|你)?的?(?:登录|登入|安全|邮箱|账号|账户)?\s*$/u.test(gap);
+      }
+      return /^\s+(?:is|was)\s+(?:your|the)\s+(?:[a-z][a-z0-9&'-]{0,39}\s+){0,3}$/iu.test(gap);
     });
     if (anchored) codes.add(code);
   }
