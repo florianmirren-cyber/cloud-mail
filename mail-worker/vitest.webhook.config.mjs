@@ -1,4 +1,4 @@
 import { defineConfig } from 'vitest/config';
 export default defineConfig({
-  test: { environment: 'node', include: ['test/resend-webhook.test.js', 'test/asset-response.test.js'] },
+  test: { environment: 'node', include: ['test/resend-webhook.test.js', 'test/asset-response.test.js', 'test/verification-portal.test.js', 'test/verification-receive.test.js'] },
 });

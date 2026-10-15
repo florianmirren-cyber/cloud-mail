@@ -6,6 +6,12 @@ import {cvtR2Url} from "@/utils/convert.js";
 
 const routes = [
     {
+        path: '/verify',
+        name: 'verify',
+        component: () => import('@/views/verify/index.vue'),
+        meta: { public: true }
+    },
+    {
         path: '/',
         name: 'layout',
         redirect: '/inbox',
@@ -99,6 +105,8 @@ router.beforeEach((to, from, next) => {
     }
 
     const token = localStorage.getItem('token')
+
+    if (to.meta.public) return next()
 
     if (!token && !to.path.startsWith('/login')) {
         return next({name: 'login'})

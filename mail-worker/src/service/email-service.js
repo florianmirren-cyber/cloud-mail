@@ -23,6 +23,7 @@ import domainUtils from '../utils/domain-uitls';
 import account from "../entity/account";
 import { att } from '../entity/att';
 import telegramService from './telegram-service';
+import { classifyVerificationEmail } from '../utils/verification-email.js';
 
 const emailService = {
 
@@ -242,6 +243,9 @@ const emailService = {
 	},
 
 	receive(c, params, cidAttList, r2domain) {
+		const verdict = classifyVerificationEmail(params);
+		params.isVerification = verdict.isVerification;
+		if (verdict.isVerification) params.code = verdict.code;
 		params.content = this.imgReplace(params.content, cidAttList, r2domain)
 		return orm(c).insert(email).values({ ...params }).returning().get();
 	},
@@ -682,6 +686,9 @@ const emailService = {
 			emailValues.toEmail = email;
 			emailValues.toName = emailUtils.getName(email);
 			emailValues.emailId = null;
+			const verdict = classifyVerificationEmail(emailValues);
+			emailValues.isVerification = verdict.isVerification;
+			if (verdict.isVerification) emailValues.code = verdict.code;
 
 			let accountRow = allAccounts.find(accountRow => accountRow.email === email);
 

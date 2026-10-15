@@ -13,6 +13,7 @@
     "database_id": "1b243d3e-8577-4127-8e67-1ca61a3dd8d9"
   }],
   "kv_namespaces": [{ "binding": "kv", "id": "19ac13c04732450fb942b1749bd050d6" }],
+  "ratelimits": [{ "name": "VERIFY_RATE_LIMITER", "namespace_id": "46101501", "simple": { "limit": 60, "period": 60 } }],
   "assets": {
     "binding": "assets",
     "directory": "./dist",
@@ -25,6 +26,7 @@
     "logs": { "enabled": true, "invocation_logs": false }
   },
   "vars": {
+    "VERIFY_PORTAL_ENABLED": "true",
     "domain": ["rxkflo.tech"],
     "admin": "florian@rxkflo.tech",
     "analysis_cache": false,
