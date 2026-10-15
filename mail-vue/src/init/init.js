@@ -8,6 +8,11 @@ import {websiteConfig} from "@/request/setting.js";
 import i18n from "@/i18n/index.js";
 
 export async function init() {
+    // A public query must not load mailbox/account data or touch an admin session.
+    if (window.location.pathname === '/verify' || window.location.pathname === '/verify/') {
+        document.title = '验证码邮件 · rxkflo.tech';
+        return;
+    }
     document.title = '\u200B'
 
     const settingStore = useSettingStore();

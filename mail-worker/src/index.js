@@ -7,10 +7,15 @@ import kvObjService from './service/kv-obj-service';
 import oauthService from './service/oauth-service';
 import analysisService from './service/analysis-service';
 import { serveAssets } from './utils/asset-response';
+import verificationApp from './api/verify-api.js';
 export default {
 	 async fetch(req, env, ctx) {
 
 		const url = new URL(req.url)
+
+		if (url.pathname === '/api/verify' || url.pathname.startsWith('/api/verify/')) {
+			return verificationApp.fetch(req, env, ctx);
+		}
 
 		if (url.pathname.startsWith('/api/')) {
 			url.pathname = url.pathname.replace('/api', '')
@@ -22,7 +27,14 @@ export default {
 			 return await kvObjService.toObjResp( { env }, url.pathname.substring(1));
 		 }
 
-		return serveAssets(req, env.assets);
+		const response = await serveAssets(req, env.assets);
+		if (url.pathname === '/verify' || url.pathname === '/verify/') {
+			const headers = new Headers(response.headers);
+			headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
+			headers.set('Referrer-Policy', 'no-referrer');
+			return new Response(response.body, { status: response.status, headers });
+		}
+		return response;
 	},
 	email: email,
 	async scheduled(c, env, ctx) {
